@@ -4,6 +4,7 @@
 \usepackage{microtype} % optional, for aesthetics
 \usepackage{tabularx} % nice to have
 \usepackage{booktabs} % necessary for style
+\usepackage{mathtools}
 % \usepackage{graphicx}
 % \graphicspath{{./figures/}}
 % \usepackage{listings}
@@ -14,21 +15,21 @@
 
 
 %%% Article metadata
-\title{Main project: song recommendation system}
-\runningtitle{RUNNING TITLE}
-
-\author[affiliation=UiT, nowrap]
-    {\'{A}lvaro Mart\'{i}nez Fern\'{a}ndez}
-    { is a master student in Computer Science at the University of Troms\o. You can contact him at \email{afe026@uit.no}.}
+\title{Main project: Song Recommendation System}
+\runningtitle{Main project: Song Recommendation System}
 
 \author[affiliation=UiT, nowrap]
     {Madhu Koirala}
     {is a master student in Computer Science at the University of Troms\o. You can contact him at \email{mko075@uit.no}.}
 
+\author[affiliation=UiT, nowrap]
+    {\'{A}lvaro Mart\'{i}nez Fern\'{a}ndez}
+    { is a master student in Computer Science at the University of Troms\o. You can contact him at \email{afe026@uit.no}.}
+
 \affiliation{UiT}{University of Troms\o, Norway\\
 \url{https://uit.no/startsida}}
 
-\runningauthor{RUNNING AUTHOR}
+\runningauthor{Madhu Koirala and \'{A}lvaro Mart\'{i}nez}
 
 \jotdetails{
     year=2020,
@@ -38,20 +39,92 @@
 \begin{document}
 
 \begin{abstract}
-ABSTRACT
+Looking for the information that we are interested in can be a tedious process nowadays because of the large amounts of data that we need to navigate. Looking for media content such as songs or movies can be even harder, since it’s difficult to know if we will like the content. Recommendation systems can help users in the decision process by filtering the content based on the content that the user likes and consumes most. In this project we implement a song recommendation system using tensorflow and a collaborative filtering approach. The model that we use consists of several users and each user has a list of songs that the user usually listens to. By using collaborative filtering, song recommendations are done by recommending songs from users with similar taste.
 \end{abstract}
 
-\keywords{Template; Keywords.}
+\keywords{Recommendation systems, recommendation methods, music recommendations, machine learning}
 
 \tableofcontents
 
 \section{Introduction}
+One of the main problems nowadays when using the internet is the overwhelming amount of data that we get and that we need to filter. Looking for the information that we want can be a tedious and boring task. There are some tools like search engines that help the user filter the content, some examples are Google\footnote{https://google.com} or Yahoo\footnote{https://www.yahoo.com}. Modern systems include new recommendation algorithms that automatically filter the content for the user, based on the information that the user has consumed. This is very common in multimedia platforms like Netflix\footnote{https://www.netflix.com} or Spotify\footnote{https://www.spotify.com}. Lists of recommended media are shown to the user with content that it may be of interest, based on the user’s interests. This is very helpful since looking, for instance, for songs that we may like can be very hard and we need to use a lot of time. Also when looking for a film that we are interested in on Netflix can be a cumbersome process. Thanks to recommendation algorithms, this content can be automatically filtered.
 
-Please use this as a template for your paper.
+There are different ways to build a recommendation system. Some approaches are by using information based on the user’s preferences, item features, factors such as time, season, etc. In the literature we can find four methods to implement a recommendation algorithm: content based, collaborative filtering, knowledge-based method and hybrid method. We will explain now each of these methods in more detail.
+
+\subsection{Content Based Method}
+This method depends on the attributes of objects or items and user profile to make recommendations to its users. For instance, in a movie recommendation system, the name of the movie is an item or object and so is the name of actors, the year it was produced and the genre or genres of the movie such as romance, action, comedy, etc. Focus on Table \ref{tab:content-based} to understand how exactly this method works.\\
+\begin{table}[h!]
+\begin{tabular}{lllll}
+Movie                & User 1 & User 2 & Attribute 1(romance) & Attribute 2(Action) \\
+Love for Seven Lives & 4      & 5      & 0.9                   & 0.1                  \\
+Against Injustice    & 5      &        & 0.1                   & 0.8                  \\
+You n Me             & 4      &        & 0.7                   & 0.2                  \\
+Earn Kr 1 Spend 10   &        & 1      & 0.1                   & 0.4                  \\
+\end{tabular}
+\caption{Content based example}
+\label{tab:content-based}
+\end{table}
+
+If we are to decide if User 2 likes the movie You n Me, we need to consider her profile and the attributes of the movie. She likes Love for Seven Lives, which has high romance and almost no action. Based on this, she has a certain profile. When we match this profile and the attributes of You n Me, it’s highly likely that she will love this movie. So, we recommend this movie to her.
+
+Content-based recommender system has the advantage that it does not require information about other users. It only needs to know what the current user is interested in. Also, it can recommend niche products as it analyses the interests of a user only and niche items are the goods specific for a particular customer base. However, there are some disadvantages too. We need to create the entire domain of sufficient knowledge of the items, such as genre, texts to explain the item, and other information which can be used to select the item of recommendation. Another demerit is it only makes recommendations around the interest of a user that it knows. If the user also likes some other types of items, it does not know because the user has never bought it.
+
+
+\subsection{Collaborative Filtering}
+This technique is entirely based on users' interaction with the items. Based on the ratings they have provided, it calculates similarity between the users. If a similarity is found, for example between A and B users, then, the system recommends the items liked by A to B.
+Let’s try to make it clear with the help  of an example of a music recommendation system. In Table \ref{tab:collaborative-filtering} we present information about music ratings for four users.\\
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{lllll}
+Users & Music A & Music B & Music C & Music D \\
+M     & 5       & 2       &         &         \\
+N     & 2       &         & 5       & 5       \\
+O     & 3       & 3       & 3       &         \\
+P     & 1       & 3       &         &         \\
+\end{tabular}
+\caption{Collaborative filtering example}
+\label{tab:collaborative-filtering}
+\end{table}
+
+The system tries to calculate the similarities between the users based on the ratings given by them. Similarity is found using the formula of Cosine Similarity.
+
+\[Sim(M,N) = \cos (\theta) = \frac{M.N}{|M|.|N|}\]
+
+If we try to find similarity between the users M and N, we need to take the values which are rated by both the users. Music A has been rated by both of them.
+\[\cos(\theta) = \frac{2.5}{\sqrt{2^2+2^2} * \sqrt{2^2 + 5^2 + 5^2}}) = 0.252\]
+
+The value of cos varies between 0 and 1. When the angle is 90 degrees, the two vectors are orthogonal which indicates there is no similarity at all and a zero degree between the vectors show they are exactly the same. In the above example, the similarity value is 0.252, which is not good enough for recommendation.
+One good aspect of this system is it does not require any domain knowledge as it can recommend an item based on the similarity of users according to their feedback. The other advantage is it may be able to recommend all types of items unlike content-based which always advise similar items. For instance, users A and B and C love folk music. And B and C also like pop music. Looking at the similarity between these users, it might be good to recommend pop music to user A. On the other hand, this system can suffer from ‘cold start’ problem. If we already have a number of interactions between various users and items then only it can recommend an item. But initially it does not have any information about users’ likings to give suggestions. So, for a fresh item or user who does not have much interaction data, it does not make a good recommendation. Also, it suffers from the problem of sparsity. In a real-world situation where there are millions of items and users, no matter how much interaction has been made but still there can be items and users with very few interactions. This can lead to ‘not good ’ recommendations. Last disadvantage it can have is scalability. It will require huge computation in a practical scenario where there is a huge dataset of users and items.
+
+
+\subsection{Knowledge-Based Method}
+This system collects users’ preferences, interests, their profile such as age, place and makes recommendations. Based on the input provided by the users, it finds similarity between their profiles and can advise the items.
+It does not require any interaction data and the recommendations can be quite good because the users have themselves set their interests and likes. On the down side, we need users to fill in their data and at times we may have to be careful about privacy concerns also.
+
+
+\subsection{Hybrid Method}
+This method combines all three techniques content-based, collaborative filtering and knowledge-based so that the individual drawbacks are cancelled out.
 
 \section{Background and Related Work (state of the art)}
+A music recommendation system is a specialized information retrieval system for multimedia content\cite{chung_kim_2018}. A recommendation system\cite{isinkaye_folajimi_ojokoh_2015} is defined as a system that searches through a large volume of information in order to filter the information based on the personalized preferences of the user. It is also seen as a decision making strategy for users under complex information environments. Originally recommender systems were defined as a way to assist the social process of using recommendations of others in order to make choices when there is not sufficient personal knowledge of the different alternatives\cite{resnick_varian_1997}.
+
+There are several approaches in the literature for the implementation of recommendation systems: content-based, collaborative filtering, knowledge-based and hybrid method. Machine learning and deep learning techniques have been used to enhance recommendation algorithms. In a study about recommendation systems\cite{singhal_sinha_pant_2017}, an analysis of the literature shows that machine learning and deep learning has been used especially for collaborative filtering algorithms.
+
+We can think of many ways to extract properties or features from the objects that we want to recommend. As for this project we will extract information from the songs such as genre, artist, title or album. In other works other properties are taken into account like in this study\cite{park_yoo_cho_2006}, where they build a music recommendation system based on the context or environment of the listener such as day, time, temperature, if it is rainy, cloudy or sunny, etc. In another study\cite{ayata_yaslan_kamasak_2018} they even measure the mood of the user by using a galvanic skin response and photoplethysmography.
+
+When analyzing related work about recommendation systems, we can find many studies that use the different methods mentioned before. We can see that content-based systems are mostly used when we are not using or cannot use metadata. For instance in this study\cite{cano_koppenberger_wack_2005} they build a music recommendation system that extracts descriptions related to instrumentation, rhythm and harmony from music audio signals. However in our project we are using metadata since we use a collaborative filtering approach, in this case music that the user likes by tagging the songs as favorites. In some recommendation systems\cite{choi_yoo_kim_suh_2012}\cite{debnath_ganguly_mitra_2008}, both collaborative and content based approaches are used, resulting in a hybrid approach. In this way the advantages from each method are used in order to enhance the accuracy of the recommendation system.
 
 \section{Problem to be solved and Aims}
+The goal of our project is to design a music recommendation system. There are many methods of implementing a recommender system. We are planning to use a collaborative filtering algorithm as it is the most used approach in the real world.
+The problems that we will face to accomplish our goal can be given by below questions:
+\begin{enumerate}
+  \item How to implement collaborative filtering approach in a music recommender system?
+  \item Which particular algorithm will give the optimum performance in our case?
+  \item What kind of dataset do we require for training and validation of our model and how can we find the right one?
+  \item Which machine learning algorithm do we need to use for the best results?
+  \item How do we train and validate our model?
+\end{enumerate}
 
 \section{Contribution}
 
@@ -62,6 +135,13 @@ Please use this as a template for your paper.
 
 \section{Conclusions, Discussion and further work}
 
+\backmatter
+
+\nocite{*}
+\bibliographystyle{alphaurl}
+\bibliography{main}
+
+% \newpage
 \abouttheauthors
 
 \end{document}
