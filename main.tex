@@ -136,7 +136,7 @@ We have implemented the song recommendation system using Python and some package
 As for the evaluation we have compared the collaborative filtering solution with a more primitive one, a popularity based algorithm. We couldn’t evaluate how good the recommended songs were, since this can be a bit subjective to each user.
 
 \subsection{Architecture and design}
-The song recommendation system is built using a machine learning technique. The dataset used in the system contains information about users, songs that the users have listened to and how many times they have listened to a particular songs. This dataset comes from the Million Song Dataset\cite{millionsongs} and in particular we use two files from this dataset. The first dataset\footnote{https:\/\/static.turi.com\/datasets\/millionsong\/song\_data.csv} is the metadata file which contains song ID and related information about the songs. The second one\footnote{https:\/\/static.turi.com\/datasets\/millionsong\/10000.txt} is the rating dataset containing the user ID, song ID and the number of times the songs have been heard by the users. In the system we train the dataset and make 2 types of recommendations, one that is popularity based and a second one that is personalized for each user. In Figure \ref{fig:architecture} we can see an overview of the architecture of the system.
+The song recommendation system is built using a machine learning technique\cite{medium}. The dataset used in the system contains information about users, songs that the users have listened to and how many times they have listened to a particular songs. This dataset comes from the Million Song Dataset\cite{millionsongs} and in particular we use two files from this dataset. The first dataset\footnote{https:\/\/static.turi.com\/datasets\/millionsong\/song\_data.csv} is the metadata file which contains song ID and related information about the songs. The second one\footnote{https:\/\/static.turi.com\/datasets\/millionsong\/10000.txt} is the rating dataset containing the user ID, song ID and the number of times the songs have been heard by the users. In the system we train the dataset and make 2 types of recommendations, one that is popularity based and a second one that is personalized for each user. In Figure \ref{fig:architecture} we can see an overview of the architecture of the system.
 
 \begin{figure}[h!]
     \centering%
@@ -149,11 +149,9 @@ The initial step that we do is to combine the two datasets and then remove dupli
 
 For recommendation, two strategies have been adopted. The first one is based on the popularity of songs which is directly related to the number of songs that have been listened to. And the second uses co-occurrence matrix which is a measure that calculates by what factor the items are related to each other. The algorithm used is Jaccard Similarity to find similarity between the items.
 
-The popularity based model generates the same results irrespective of the user because it simply lists out the most popular songs. On the other hand, the co-occurrence matrix generates a personalized list of recommended songs for a specific user.\\
+The popularity based model generates the same results irrespective of the user because it simply lists out the most popular songs. On the other hand, the co-occurrence matrix generates a personalized list of recommended songs for a user.
 
-As for the design of the system we have used Python to develop the song recommendation system. For the machine learning logic we used pandas and sklearn Python packages. pandas is a data analysis and manipulation tool that helped us shape the dataset. sklearn was used to train the dataset using the function train\_test\_split, which split arrays or matrices into random train and test subsets.
-
-We also built a small graphic user interface using the tkinter Python package, which is used for graphic interfaces. In the GUI we can see the song recommendation for a particular user, using the co-occurrence matrix approach. See Figure \ref{fig:design} for an example of the GUI.
+As for the design of the system we have used Python to develop the song recommendation system. For the machine learning logic we used pandas and sklearn Python packages. pandas is a data analysis and manipulation tool that helped us shape the dataset. sklearn was used to train the dataset using the function train\_test\_split, which split arrays or matrices into random train and test subsets. We also built a small graphic user interface using the tkinter Python package, which is used for graphic interfaces. In the GUI we can see the song recommendation for a particular user, using the co-occurrence matrix approach. See Figure \ref{fig:design} for an example of the GUI.
 
 \begin{figure}[h!]
     \centering%
@@ -164,12 +162,11 @@ We also built a small graphic user interface using the tkinter Python package, w
 
 \subsection{Results and evaluation}
 The program is able to produce recommendations for both popularity-based and similarity based approaches. Both of them provide top 10 recommendations. The first one produces same results as it just shows the most popular songs without giving any concern to the user, while the second one displays personalized  list of songs.
-Figure \ref{fig:evaluation}. shows a precision recall curve, which will be used to interpret the results produced by these approaches. In this case, for our problem domain, what is important is the length that a song is listened to, that a number of users have all liked the song. Recall is in this case the “measure of the proportion of all relevant results included in the top results”. Precision is the measure  of the relevancy of songs in relation to the top ten results of a recommended song, whereas recall seeks to measure the relevancy of songs in relation to all the songs.
-\\
+Figure \ref{fig:evaluation}. shows a precision recall curve, which will be used to interpret the results produced by these approaches. In this case, for our problem domain, what is important is the length that a song is listened to, that a number of users have all liked the song. Recall is in this case the “measure of the proportion of all relevant results included in the top results”. Precision is the measure  of the relevancy of songs in relation to the top ten results of a recommended song, whereas recall seeks to measure the relevancy of songs in relation to all the songs.\\
 
 \begin{figure}[h!]
     \centering%
-    \includegraphics[width=0.9\textwidth]{evaluation}
+    \includegraphics[width=0.8\textwidth]{evaluation}
     \caption{Precision-Recall curve.}
     \label{fig:evaluation}
 \end{figure}%
@@ -179,7 +176,7 @@ Similarly, we tried to trace out how many times the result shown by item-similar
 
 \section{Conclusions, Discussion and further work}
 
-After building this recommender system, there are few things we can outline, which are crucial for a collaborative recommendation system. First of all, we need to have a dataset containing the ratings provided by the user. This is also called user-interaction data and it is a must for collaborative approach. This approach is based on similarity of users or items and similarity is actually a function of ratings given by the users. There are a number of ways to calculate similarity and so many ways to make predictions. So, in the real world we have to be aware of all these methods and be able to use the particular methods best suited for a certain environment or situation. In this project, however more than evaluating the efficiency of a particular approach, we focussed on producing the results.
+After building this recommender system, there are few things we can outline, which are crucial for a collaborative recommendation system. First of all, we need to have a dataset containing the ratings provided by the user. This is also called user-interaction data and it is a must for collaborative approach. This approach is based on similarity of users or items and similarity is actually a function of ratings given by the users. There are a number of ways to calculate similarity and so many ways to make predictions. So, in the real world we have to be aware of all these methods and be able to use the particular methods best suited for a certain environment or situation. In this project, however more than evaluating the efficiency of a particular approach, we focussed on producing the results.\\
 
 Precision Recall curve in Figure \ref{fig:evaluation} can be helpful in analyzing the performance of popularity and similarity based approaches. From the graph, we can conclude that similarity based approach gives more accurate results than naive popularity based approach, as the curve for similarity based method shows it works for much higher values of precision and recall compared with the other method.
 
