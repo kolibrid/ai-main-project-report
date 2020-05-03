@@ -41,7 +41,7 @@
 \begin{document}
 
 \begin{abstract}
-Looking for the information that we are interested in can be a tedious process nowadays because of the large amounts of data that we need to navigate. Looking for media content such as songs or movies can be even harder, since it’s difficult to know if we will like the content. Recommendation systems can help users in the decision process by filtering the content based on the content that the user likes and consumes most. In this project we implement a song recommendation system using tensorflow and a collaborative filtering approach. The model that we use consists of several users and each user has a list of songs that the user usually listens to. By using collaborative filtering, song recommendations are done by recommending songs from users with similar taste.
+Looking for the information that we are interested in can be a tedious process nowadays because of the large amounts of data that we need to navigate. Looking for media content such as songs or movies can be even harder, since it’s difficult to know if we will like the content. Recommendation systems can help users in the decision process by filtering the content based on the content that the user likes and consumes most. In this project we implement a song recommendation system using collaborative filtering approach. The model that we use consists of several users and each user has a list of songs that the user usually listens to. By using collaborative filtering, song recommendations are done by recommending songs from users with similar taste using Jaccard similarity. Also, a simple approach which uses popularity of songs (number of users and listen counts) has been implemented. Both methods show a list of recommended songs for a user and a comparison between them with the help of precision recall curve proves a better performance of similarity-based approach.
 \end{abstract}
 
 \keywords{Recommendation systems, recommendation methods, music recommendations, machine learning}
@@ -118,8 +118,8 @@ We can think of many ways to extract properties or features from the objects tha
 When analyzing related work about recommendation systems, we can find many studies that use the different methods mentioned before. We can see that content-based systems are mostly used when we are not using or cannot use metadata. For instance in this study\cite{cano_koppenberger_wack_2005} they build a music recommendation system that extracts descriptions related to instrumentation, rhythm and harmony from music audio signals. However in our project we are using metadata since we use a collaborative filtering approach, in this case music that the user likes by tagging the songs as favorites. In some recommendation systems\cite{choi_yoo_kim_suh_2012}\cite{debnath_ganguly_mitra_2008}, both collaborative and content based approaches are used, resulting in a hybrid approach. In this way the advantages from each method are used in order to enhance the accuracy of the recommendation system.
 
 \section{Problem to be solved and Aims}
-The goal of our project is to design a music recommendation system. There are many methods of implementing a recommender system. We are planning to use a collaborative filtering algorithm as it is the most used approach in the real world.
-The problems that we will face to accomplish our goal can be given by below questions:
+The goal of our project is to design a music recommendation system. There are many methods of implementing a recommender system. We have used a collaborative filtering algorithm as it is the most used approach in the real world.
+The problems that we had anticipated to face to accomplish our goal are as below: We will discuss these issues in the discussion part.
 \begin{enumerate}
   \item How to implement collaborative filtering approach in a music recommender system?
   \item Which particular algorithm will give the optimum performance in our case?
@@ -164,12 +164,13 @@ We also built a small graphic user interface using the tkinter Python package, w
 
 \subsection{Results and evaluation}
 The program is able to produce recommendations for both popularity-based and similarity based approaches. Both of them provide top 10 recommendations. The first one produces same results as it just shows the most popular songs without giving any concern to the user, while the second one displays personalized  list of songs.
-Figure \ref{fig:evaluation}. shows a precision recall curve, which will be used to interpret the results produced by these approaches.\\
+Figure \ref{fig:evaluation}. shows a precision recall curve, which will be used to interpret the results produced by these approaches. In this case, for our problem domain, what is important is the length that a song is listened to, that a number of users have all liked the song. Recall is in this case the “measure of the proportion of all relevant results included in the top results”. Precision is the measure  of the relevancy of songs in relation to the top ten results of a recommended song, whereas recall seeks to measure the relevancy of songs in relation to all the songs.
+\\
 
 \begin{figure}[h!]
     \centering%
-    \includegraphics[width=\textwidth]{evaluation}
-    \caption{GPrecision-Recall curve.}
+    \includegraphics[width=0.9\textwidth]{evaluation}
+    \caption{Precision-Recall curve.}
     \label{fig:evaluation}
 \end{figure}%
 
