@@ -13,6 +13,8 @@
 % \newcommand\code[1]{\texttt{#1}}
 % \let\file\code
 
+\graphicspath{{images/}}
+
 
 %%% Article metadata
 \title{Main project: Song Recommendation System}
@@ -127,13 +129,60 @@ The problems that we will face to accomplish our goal can be given by below ques
 \end{enumerate}
 
 \section{Contribution}
+A recommendation system for songs can be very practical in many applications and services nowadays. With the Internet, people can easily have access to endless multimedia content like music. Also the potential that there is at the moment to find new music and get good recommendations is enormous thanks to machine learning and recommendation systems. We present here an example of how to implement a song recommendation system using a collaborative filtering algorithm.
 
-\subsection{Design}
-\subsection{Architecture}
-\subsection{Results}
-\subsection{Evaluation}
+We have implemented the song recommendation system using Python and some packages like sklearn and pandas used for machine learning. We have also built a small graphic user interface that shows potential recommendation songs for a user.
+
+As for the evaluation we have compared the collaborative filtering solution with a more primitive one, a popularity based algorithm. We couldn’t evaluate how good the recommended songs were, since this can be a bit subjective to each user.
+
+\subsection{Architecture and design}
+The song recommendation system is built using a machine learning technique. The dataset used in the system contains information about users, songs that the users have listened to and how many times they have listened to a particular songs. This dataset comes from the Million Song Dataset\cite{millionsongs} and in particular we use two files from this dataset. The first dataset\footnote{https:\/\/static.turi.com\/datasets\/millionsong\/song\_data.csv} is the metadata file which contains song ID and related information about the songs. The second one\footnote{https:\/\/static.turi.com\/datasets\/millionsong\/10000.txt} is the rating dataset containing the user ID, song ID and the number of times the songs have been heard by the users. In the system we train the dataset and make 2 types of recommendations, one that is popularity based and a second one that is personalized for each user. In Figure \ref{fig:architecture} we can see an overview of the architecture of the system.
+
+\begin{figure}[h!]
+    \centering%
+    \includegraphics[width=\textwidth]{architecture}
+    \caption{Architecture of the system.}
+    \label{fig:architecture}
+\end{figure}%
+
+The initial step that we do is to combine the two datasets and then remove duplicates that this merging causes and ending up with a new dataset that contains the following fields: User ID, Song ID, Listen Count, Song Title, Release, Artist Name and Release Year. Then a subset of 15000 entries from the dataset is taken since the original dataset is too large and for the purpose of this project it is enough with a smaller dataset. The subset is further split into two sets: training and testing sets, the former comprising 80\% of the dataset.
+
+For recommendation, two strategies have been adopted. The first one is based on the popularity of songs which is directly related to the number of songs that have been listened to. And the second uses co-occurrence matrix which is a measure that calculates by what factor the items are related to each other. The algorithm used is Jaccard Similarity to find similarity between the items.
+
+The popularity based model generates the same results irrespective of the user because it simply lists out the most popular songs. On the other hand, the co-occurrence matrix generates a personalized list of recommended songs for a specific user.\\
+
+As for the design of the system we have used Python to develop the song recommendation system. For the machine learning logic we used pandas and sklearn Python packages. pandas is a data analysis and manipulation tool that helped us shape the dataset. sklearn was used to train the dataset using the function train\_test\_split, which split arrays or matrices into random train and test subsets.
+
+We also built a small graphic user interface using the tkinter Python package, which is used for graphic interfaces. In the GUI we can see the song recommendation for a particular user, using the co-occurrence matrix approach. See Figure \ref{fig:design} for an example of the GUI.
+
+\begin{figure}[h!]
+    \centering%
+    \includegraphics[width=\textwidth]{design}
+    \caption{GUI for song recommendation for a particular user using the co-occurrence matrix approach.}
+    \label{fig:design}
+\end{figure}%
+
+\subsection{Results and evaluation}
+The program is able to produce recommendations for both popularity-based and similarity based approaches. Both of them provide top 10 recommendations. The first one produces same results as it just shows the most popular songs without giving any concern to the user, while the second one displays personalized  list of songs.
+Figure \ref{fig:evaluation}. shows a precision recall curve, which will be used to interpret the results produced by these approaches.\\
+
+\begin{figure}[h!]
+    \centering%
+    \includegraphics[width=\textwidth]{evaluation}
+    \caption{GPrecision-Recall curve.}
+    \label{fig:evaluation}
+\end{figure}%
+
+The results have been evaluated using a very simple technique. The unique user ID ranges from 0 to 3862. A number of tests have been run to cover the whole range of user ID and results produced successfully. This shows that the system can make recommendations in all situations. Further, a verification is carried out by looking at the list of dataset and counting the number of listens, which showed that the result of popularity-based should be correct.
+Similarly, we tried to trace out how many times the result shown by item-similarity approach appears in the dataset for a simple verification of the results. If it recommends an item which has been rated by only a single user of a few users, then we could possibly imagine that it might be producing a wrong result. Such cases were not found, approving of the methods we used.
 
 \section{Conclusions, Discussion and further work}
+
+After building this recommender system, there are few things we can outline, which are crucial for a collaborative recommendation system. First of all, we need to have a dataset containing the ratings provided by the user. This is also called user-interaction data and it is a must for collaborative approach. This approach is based on similarity of users or items and similarity is actually a function of ratings given by the users. There are a number of ways to calculate similarity and so many ways to make predictions. So, in the real world we have to be aware of all these methods and be able to use the particular methods best suited for a certain environment or situation. In this project, however more than evaluating the efficiency of a particular approach, we focussed on producing the results.
+
+Precision Recall curve in Figure \ref{fig:evaluation} can be helpful in analyzing the performance of popularity and similarity based approaches. From the graph, we can conclude that similarity based approach gives more accurate results than naive popularity based approach, as the curve for similarity based method shows it works for much higher values of precision and recall compared with the other method.
+
+The system now shows popularity-based and similarity-based recommendations separately. As a further work, we can work to produce popularity-based recommendations for new users who do not have any interaction data. This combining these approaches we can make a better system suited for both new as well as old users.
 
 \backmatter
 
