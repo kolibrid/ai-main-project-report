@@ -1,5 +1,9 @@
-# ai-main-project-report
+# Main Project - Artificial Intelligence
+Authors:
+Álvaro Martínez Fernández
+Madhu Koirala
 
+This is the report for the main project from Artificial Intelligence course.
 
 <h1 id="class_and_template_files_for_the_journal_of_object_technology">Class and template files for the Journal of Object Technology</h1>
 
