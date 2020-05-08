@@ -1,8 +1,6 @@
 # Main Project - Artificial Intelligence
 Authors:
-Álvaro Martínez Fernández
-
-Madhu Koirala
+Álvaro Martínez Fernández and Madhu Koirala
 
 This is the report for the main project from Artificial Intelligence course.
 
